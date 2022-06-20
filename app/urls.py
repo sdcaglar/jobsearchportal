@@ -7,6 +7,9 @@ from .views import (
     logout_jobseeker,
     logout_recruiter,
     HomeView,
+    UserHomeView,
+    UserProfileView,
+    change_password,
 )
 
 urlpatterns = [
@@ -17,4 +20,7 @@ urlpatterns = [
     path("recruiter/login/", login_recruiter, name="recruiter-login"),
     path("recruiter/logout/", logout_recruiter, name="recruiter-logout"),
     path("recruiter/signup/", create_recruiter, name="recruiter-signup"),
+    path("home", UserHomeView.as_view(), name="user-home"),
+    path("profile/<int:pk>", UserProfileView.as_view(), name="profile"),
+    path("settings/", change_password, name="settings"),
 ]
