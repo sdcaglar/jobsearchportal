@@ -1,0 +1,12 @@
+body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .content-wrapper, body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-footer, body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-header {
+    margin-left: 0px !important;
+}
+
+a {
+    font-size: 12px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: red;
+    margin-bottom: 2%;
+}
