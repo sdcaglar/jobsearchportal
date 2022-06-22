@@ -38,7 +38,7 @@ should be able to manage. A password reset mechanism should also be implemented.
 First, clone the repository to your local machine and prepare an environment
 
 ```bash
-sedacaglar@debian:~$ git clone git@github.com:sdcaglar/jobsearchportal.git
+sedacaglar@debian:~$ git clone https://github.com/sdcaglar/jobsearchportal.git
 sedacaglar@debian:~$ cd jobsearchportal
 sedacaglar@debian:~/jobsearchportal$ python3 -m venv env
 sedacaglar@debian:~/jobsearchportal$ . env/bin/activate
