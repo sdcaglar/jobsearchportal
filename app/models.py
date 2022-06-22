@@ -34,13 +34,14 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     email = models.EmailField(
-        verbose_name="email address",
+        verbose_name="email",
         max_length=255,
         unique=True,
     )
     name = models.CharField(max_length=20)
     surname = models.CharField(max_length=20)
     phone = PhoneNumberField(null=True, blank=True)
+    profile_image = models.ImageField(default="profile.jpg", upload_to="profile_images")
     identity_number = models.CharField(max_length=20, blank=True)
     address = models.CharField(max_length=200, blank=True)
     is_active = models.BooleanField(default=True)
@@ -54,7 +55,7 @@ class User(AbstractBaseUser):
     REQUIRED_FIELDS = ["name", "surname"]
 
     def __str__(self):
-        return self.email
+        return self.name + " " + self.surname
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"

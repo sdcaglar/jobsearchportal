@@ -40,14 +40,12 @@ class UserChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = (
-            "email",
-            "password",
             "name",
             "surname",
-            "is_active",
-            "is_admin",
-            "is_jobseeker",
-            "is_recruiter",
+            "profile_image",
+            "identity_number",
+            "phone",
+            "address",
         )
 
 
@@ -59,6 +57,10 @@ class UserAdmin(BaseUserAdmin):
         "email",
         "name",
         "surname",
+        "profile_image",
+        "identity_number",
+        "phone",
+        "address",
         "is_jobseeker",
         "is_recruiter",
         "is_admin",
@@ -66,7 +68,19 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ("is_admin", "is_jobseeker", "is_recruiter")
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        ("Personal info", {"fields": ("name", "surname")}),
+        (
+            "Personal info",
+            {
+                "fields": (
+                    "name",
+                    "surname",
+                    "profile_image",
+                    "identity_number",
+                    "phone",
+                    "address",
+                )
+            },
+        ),
         (
             "Permissions",
             {
