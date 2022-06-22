@@ -1,12 +1,30 @@
-body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .content-wrapper, body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-footer, body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-header {
-    margin-left: 0px !important;
-}
-
-a {
+a  {
     font-size: 12px;
 }
 
 h1, h2, h3, h4, h5, h6 {
     color: red;
     margin-bottom: 2%;
+}
+
+tr {
+    border-style: hidden;
+ }
+
+.btn-success, .btn-danger, .btn-info, .btn-warning, .btn-dark {
+    color: black;
+    background-color: white;
+}
+
+.evaluation-result {
+    font-weight: bold;
+    background-color: rgb(70 64 60 / 53%)
+    color: rgb(255 255 255);
+    padding: 10px;
+}
+
+.user-menu-link {
+    padding-right: 6px;
+    font-size: 16px;
+    font-weight: bold;
 }
