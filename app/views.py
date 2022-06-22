@@ -124,6 +124,8 @@ def create_jobseeker(request):
             jobseeker.save()
             messages.success(request, "Account was created")
             return redirect("jobseeker-login")
+        else:
+            messages.error(request, "Oops, this account could not be created")
     else:
         jobseeker_form = JobSeekerSignUpForm()
     return render(
@@ -140,7 +142,7 @@ def login_jobseeker(request):
             login(request, user)
             return redirect("user-home")
         else:
-            messages.info(request, "Email or password is incorrect")
+            messages.error(request, "Email or password is incorrect")
 
     context = {}
     return render(request, "accounts/jobseeker/login.html", context)
@@ -159,6 +161,8 @@ def create_recruiter(request):
             jobseeker.save()
             messages.success(request, "account was created")
             return redirect("recruiter-login")
+        else:
+            messages.error(request, "Oops, this account could not be created")
     else:
         recruiter_form = RecruiterSignUpForm()
     return render(
@@ -175,7 +179,7 @@ def login_recruiter(request):
             login(request, user)
             return redirect("user-home")
         else:
-            messages.info(request, "Email or password is incorrect")
+            messages.error(request, "Email or password is incorrect")
 
     context = {}
     return render(request, "accounts/recruiter/login.html", context)
