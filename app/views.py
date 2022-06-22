@@ -2,11 +2,15 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, ListView
-from django.views.generic.edit import UpdateView
-from .forms import JobSeekerSignUpForm, RecruiterSignUpForm
+from django.db.models import Q
+from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic.edit import UpdateView, DeleteView
+from .forms import JobSeekerSignUpForm, RecruiterSignUpForm, JobForm
 from .models import Job, UserJob, User
+from .admin import UserChangeForm
 
 
 class HomeView(TemplateView):
@@ -22,17 +26,77 @@ class UserHomeView(ListView):
         if self.request.user.is_recruiter:
             context["jobs"] = Job.objects.filter(publisher=self.request.user)
         if self.request.user.is_jobseeker:
-            context["jobs"] = Job.objects.all()
+            if "search_job" in self.request.GET:
+                table_search = self.request.GET.get("table_search")
+                context["jobs"] = Job.objects.filter(Q(name__icontains=table_search))
+            else:
+                context["jobs"] = Job.objects.all()
             context["my_jobs"] = UserJob.objects.filter(user=self.request.user)
         return context
 
 
-class UserProfileView(SuccessMessageMixin, UpdateView):
+class UserProfileUpdateView(SuccessMessageMixin, UpdateView):
     model = User
     template_name = "profile.html"
-    fields = ["name", "surname", "email", "phone", "identity_number", "address"]
+    fields = [
+        "name",
+        "surname",
+        "email",
+        "profile_image",
+        "phone",
+        "identity_number",
+        "address",
+    ]
     success_message = "Successfully updated"
     error_message = "Oops, Information could not be updated"
+
+
+class JobDetailView(DetailView):
+    model = Job
+    template_name = "detail_job.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["jobs"] = Job.objects.filter(pk=self.kwargs.get("pk"))
+        if self.request.user.is_recruiter:
+            context["applications"] = UserJob.objects.filter(job=self.kwargs.get("pk"))
+        return context
+
+
+class JobEvaluationDetailView(DetailView):
+    model = UserJob
+    template_name = "evaluation_job.html"
+
+
+class JobEditView(SuccessMessageMixin, UpdateView):
+    model = Job
+    template_name = "edit_job.html"
+    fields = ["name", "details"]
+    success_message = "Successfully updated"
+    error_message = "Oops, Information could not be updated"
+
+
+class JobDeleteView(SuccessMessageMixin, DeleteView):
+    model = Job
+    template_name = "delete_job.html"
+    fields = ["name"]
+    success_url = reverse_lazy("user-home")
+    success_message = "The created job posting has been deleted"
+    error_message = "Oops, this job could not be deleted"
+
+
+class SearchView(ListView):
+    model = Job
+    template_name = "base.html"
+
+    def get_queryset(self):
+        search = self.request.GET.get("search")
+        jobs = {}
+        if search is not None:
+            jobs = Job.objects.filter(
+                Q(name__icontains=search) | Q(company__icontains=search)
+            )
+        return jobs
 
 
 def change_password(request):
@@ -90,7 +154,6 @@ def logout_jobseeker(request):
 def create_recruiter(request):
     if request.method == "POST":
         recruiter_form = RecruiterSignUpForm(request.POST)
-        print(recruiter_form)
         if recruiter_form.is_valid():
             jobseeker = recruiter_form.save(commit=False)
             jobseeker.save()
@@ -121,3 +184,54 @@ def login_recruiter(request):
 def logout_recruiter(request):
     logout(request)
     return redirect("home")
+
+
+def create_job(request):
+    if request.method == "POST":
+        job_form = JobForm(request.POST)
+        if job_form.is_valid():
+            job = job_form.save(commit=False)
+            job.publisher = request.user
+            job.save()
+            messages.success(request, "Your job posting has been successfully created.")
+            return redirect("user-home")
+    else:
+        job_form = JobForm()
+    return render(request, "create_job.html", {"job_form": job_form})
+
+
+def apply_job(request, pk):
+    user = request.user
+    job = get_object_or_404(Job, pk=pk)
+    if request.method == "POST":
+        if UserJob.objects.filter(user=user, job=job).exists():
+            messages.error(request, "You have already applied for this posting.")
+            return render(request, "apply_job.html", {"job": job})
+        else:
+            UserJob.objects.create(user=user, job=job)
+            messages.success(
+                request, "Your application for the job has been successfully completed"
+            )
+            return redirect("user-home")
+    else:
+        return render(request, "apply_job.html", {"job": job})
+
+
+def profile(request):
+    user = request.user
+    form = UserChangeForm(instance=user)
+    if request.method == "POST":
+        form = UserChangeForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+
+    context = {"form": form}
+    return render(request, "profile.html", context)
+
+
+def custom_page_not_found_view(request, exception):
+    return render(request, "errors/404.html", {})
+
+
+def custom_error_view(request, exception=None):
+    return render(request, "errors/500.html", {})
