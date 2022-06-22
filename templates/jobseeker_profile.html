@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="row" style="padding-top: 5%;">
+    <h3 style="text-align: center;">Personal Information</h3>
+    <div class="col-md-6">
+        <div class="card card-body" style="height: 100%;">
+            <h3 style="text-align: center; color: black;">{{ jobseeker.name }} {{jobseeker.surname }}</h3>
+            <hr>
+            <img class="profile-pic" src="{{jobseeker.profile_image.url}}" >
+
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-body" style="height: 100%;">
+              <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                  <input type="text"
+                         readonly
+                         value="{{ jobseeker.name }}"
+                         maxlength="30">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="surname" class="col-sm-2 col-form-label">Surname</label>
+                <div class="col-sm-10">
+                  <input type="text"
+                         readonly
+                         value="{{ jobseeker.surname }}"
+                         maxlength="30">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="identity_number" class="col-sm-2 col-form-label">Identity Number</label>
+                <div class="col-sm-10">
+                  <input type="text"
+                         readonly
+                         value="{{ jobseeker.identity_number }}"
+                         maxlength="30">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="address" class="col-sm-2 col-form-label">Address</label>
+                <div class="col-sm-10">
+                  <input type="text"
+                         readonly
+                         value="{{ jobseeker.address }}"
+                         maxlength="50">
+                </div>
+              </div>
+            <a class="btn btn-dark" style="margin-top: 10px;" href="{% url 'user-home' %}"> &#8592; Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,26 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div style="max-width: 80%; padding-top: 5%; margin-right: auto; margin-left:auto;">
-    <h3>{{job.name}}</h3>
-    <h4 style="color:black">{{job.company}}</h5>
-    <h5 style="color:black">{{job.company_address}}</h5>
-    <p>{{job.details|linebreaks}}</p>
-    <div>
+<div class="row" style="padding-top: 5%; margin-right: auto; margin-left:auto;">
+    <div class="col-md-6">
+        <h3>{{job.name}}</h3>
+        <h4 style="color:black">{{job.company}}</h5>
+        <h5 style="color:black">{{job.company_address}}</h5>
+        <p>{{job.details|linebreaks}}</p>
         {% if user.is_recruiter %}
-            <hr>
-            <h5 style="text-align:left; color: black;">Applicants</h5>
-            <hr>
-            {% for app in applications %}
-                <li style="margin-bottom: 5px;">{{app.user.name}} - {{app.date}}</li>
-            {% endfor %}
-            <br>
-            <a href="{% url 'edit-job' job.pk%}" class="btn btn-warning">Edit</a>
-            <a href="{% url 'delete-job' job.pk%}" class="btn btn-danger">Delete</a>
+            <a href="{% url 'edit-job' job.pk %}" class="btn btn-warning">Edit</a>
+            <a href="{% url 'delete-job' job.pk %}" class="btn btn-danger">Delete</a>
         {% elif user.is_jobseeker %}
             <a href="{% url 'apply-job' job.pk %}" class="btn btn-dark">Apply</a>
-        {% else %}
         {% endif %}
+    </div>
+    <div class="col-md-6">
+        <div class="card" style="height: 100%;">
+            <div class="card-header">
+                <h3 class="card-title">Applicants</h3>
+            </div>
+            <div class="card-body table-responsive p-0">
+                <table class="table table-head-fixed text-nowrap">
+                    <thead>
+                        <tr>
+                           <th scope="col">Date</th>
+                           <th scope="col">User</th>
+                           <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for app in applications %}
+                        <tr>
+                            <td>{{app.date}}</td>
+                            <td>{{app.user.name}}</td>
+                            <td style="float: right; border-style: hidden;">
+                                <a href="{% url 'jobseeker-profile' app.user.pk %}" class="btn btn-success">Profile</a>
+                            </td>
+                        </tr>
+                         {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

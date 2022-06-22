@@ -233,6 +233,12 @@ def profile(request):
     return render(request, "profile.html", context)
 
 
+def jobseeker_profile(request, pk):
+    user = get_object_or_404(User, pk=pk)
+
+    return render(request, "jobseeker_profile.html", {"jobseeker": user})
+
+
 def custom_page_not_found_view(request, exception):
     return render(request, "errors/404.html", {})
 

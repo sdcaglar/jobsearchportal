@@ -17,6 +17,7 @@ from .views import (
     JobEvaluationDetailView,
     SearchView,
     profile,
+    jobseeker_profile,
 )
 
 
@@ -30,6 +31,7 @@ urlpatterns = [
     path("recruiter/signup/", create_recruiter, name="recruiter-signup"),
     path("home", UserHomeView.as_view(), name="user-home"),
     path("profile", profile, name="profile"),
+    path("jobseeker-profile/<int:pk>/", jobseeker_profile, name="jobseeker-profile"),
     path("settings/", change_password, name="settings"),
     path("job/<int:pk>/", JobDetailView.as_view(), name="job-detail"),
     path("job/<int:pk>/edit", JobEditView.as_view(), name="edit-job"),
