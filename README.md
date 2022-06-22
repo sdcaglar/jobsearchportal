@@ -55,8 +55,8 @@ Install the requirements
 
 ```bash
 root@debian:~# su -l postgres
-postgres@debian:~$ CREATE DATABASE jobportaldb;
-postgres@debian:~$ psql -U sedacaglar jobportaldb ;
+postgres@debian:~$ CREATE DATABASE db_jobportal;
+postgres@debian:~$ psql -U sedacaglar db_jobportal ;
 ```
 
 #### Create Tables From Model
