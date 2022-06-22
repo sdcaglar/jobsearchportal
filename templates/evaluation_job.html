@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="max-width: 80%; padding-top: 5%; margin-right: auto; margin-left:auto;">
+    <h3>{{object.job.name}}</h3>
+    <h5 style="color:rgb(253 126 20)">{{object.job.company}}</h5>
+    <p>{{object.job.details|linebreaks}}</p>
+    <p class="evaluation-result">Evaluation Result: {{object.evaluation_result}}</p>
+</div>
+{% endblock %}

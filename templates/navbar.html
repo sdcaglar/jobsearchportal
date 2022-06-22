@@ -1,0 +1,40 @@
+{% load static %}
+<nav class="main-header navbar navbar-expand navbar-white navbar-light" style="margin-left: 0px">
+    {% if user.is_authenticated %}
+    <a href="{% url 'user-home' %}" class="navbar-brand">
+        <span class="brand-text font-weight-light"><strong>JobSeeker - </strong> Portal</span>
+    </a>
+    {% else %}
+    <a href="{% url 'home' %}" class="navbar-brand">
+        <span class="brand-text font-weight-light"><strong>JobSeeker - </strong> Portal</span>
+    </a>
+    {% endif %}
+    <ul class="navbar-nav ml-auto">
+        {% if user.is_authenticated %}
+            <li class="nav-item dropdown">
+                <a class="nav-link" data-toggle="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="user-menu-link">{{user.name}} {{user.surname}}</span>
+                    <img src="{{ user.profile_image.url }}" class="profile-user-img img-fluid img-circle" style="width: 38px; height: 38px; border: none;">
+                </a>
+                <div class="dropdown-menu dropdown-menu dropdown-menu-right" >
+                    <a href="{% url 'profile' %}" class="dropdown-item"> Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{% url 'settings'%}" class="dropdown-item"> Settings </a>
+                    <div class="dropdown-divider"></div>
+                    {% if user.is_recruiter %}
+                        <a class="dropdown-item" href="{% url 'recruiter-logout' %}">Log Out</a>
+                    {% else %}
+                        <a class="dropdown-item" href="{% url 'jobseeker-logout' %}"> Log Out </a>
+                    {% endif %}
+                </div>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'jobseeker-login' %}" style="font-size: 16px;">JobSeeker</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'recruiter-login' %}" style="font-size: 16px;">Recruiter</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>

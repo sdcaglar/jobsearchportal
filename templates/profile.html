@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<style>
+    .profile-pic{
+        max-width:300px;
+        max-height:300px;
+        margin: 0 auto;
+        border-radius: 50%;
+    }
+</style>
+<div class="row" style="padding-top: 5%;">
+    <h3 style="text-align: center;">Personal Information</h3>
+    <div class="col-md-6">
+        <div class="card card-body" style="height: 100%;">
+            <h3 style="text-align: center; color: black;">{{request.user.name }} {{request.user.surname }}</h3>
+            <hr>
+            <img class="profile-pic" src="{{request.user.profile_image.url}}" >
+
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-body" style="height: 100%;">
+            <form method="POST" action="" enctype="multipart/form-data">
+             {% csrf_token %}
+              <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                  <input type="text"
+                         name="name"
+                         id="name"
+                         {% if form.name.value != None %}value="{{ form.name.value|stringformat:'s' }}"{% endif %}
+                         maxlength="30">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="surname" class="col-sm-2 col-form-label">Surname</label>
+                <div class="col-sm-10">
+                  <input type="text"
+                         name="surname"
+                         id="surname"
+                         {% if form.surname.value != None %}value="{{ form.surname.value|stringformat:'s' }}"{% endif %}
+                         maxlength="30">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="identity_number" class="col-sm-2 col-form-label">Identity Number</label>
+                <div class="col-sm-10">
+                  <input type="text"
+                         name="identity_number"
+                         id="identity_number"
+                         {% if form.identity_number.value != None %}value="{{ form.identity_number.value|stringformat:'s' }}"{% endif %}
+                         maxlength="30">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="profile_image" class="col-sm-2 col-form-label">Profil Image</label>
+                <div class="col-sm-10">
+                  <input type="file"
+                         name="profile_image"
+                         id="profile_image"
+                         {% if form.profile_image.value != None %}value="{{ form.profile_image.value|stringformat:'s' }}"{% endif %}
+                         maxlength="30">
+                </div>
+              <div class="form-group row">
+                <label for="address" class="col-sm-2 col-form-label">Address</label>
+                <div class="col-sm-10">
+                  <input type="text"
+                         name="address"
+                         id="address"
+                         {% if form.address.value != None %}value="{{ form.address.value|stringformat:'s' }}"{% endif %}
+                         maxlength="50">
+                </div>
+              </div>
+                <input class="btn btn-primary" type="submit" name="Update Information">
+            </form>
+            <a class="btn btn-dark" style="margin-top: 10px;" href="{% url 'user-home' %}"> &#8592; Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

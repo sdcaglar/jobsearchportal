@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 80%; padding-top: 5%; margin-right: auto; margin-left:auto;">
+    <h3>Delete Job</h3>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <p>Do you want to delete <strong>{{job}}</strong> job? </p>
+        <input type="submit" name="Delete">
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="col-12" style="padding-top: 5%;">
+    <div class="card">
+        <div class="card-header">
+            {% if user.is_recruiter %}
+            <h3 class="card-title">My Posts</h3>
+            <a href="{% url 'create-job' %}" class="col-md-6 btn btn-link" style="float: right; text-align: end;">Create New Job Posting</a>
+            {% elif user.is_jobseeker %}
+            <h3 class="card-title">Open Positions</h3>
+            <form action="{% url 'user-home' %}" method="GET">
+                <div class="card-tools" style="float:right">
+                    <div class="input-group input-group-sm" style="width: 350px;">
+                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search Job">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default" name="search_job">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+        <div class="card-body table-responsive p-0" style="height: 300px;">
+            <table class="table table-head-fixed text-nowrap">
+                <thead>
+                    <tr>
+                       <th scope="col">Publishing Date</th>
+                       <th scope="col">Job</th>
+                       <th scope="col">Company</th>
+                       {% if user.is_jobseeker %}
+                       <th scope="col">Publisher</th>
+                       {% endif %}
+                       <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job in jobs %}
+                    <tr>
+                        <td>{{job.publishing_date}}</td>
+                        <td>{{job.name}}</td>
+                        <td>{{job.company}}</td>
+                        {% if user.is_jobseeker %}
+                        <td>{{job.publisher}}</td>
+                        {% endif %}
+                        <td style="float: right; border-style: hidden;">
+                            <a href="{% url 'job-detail' job.pk %}" class="btn btn-success">Detail</a>
+                            {% if user.is_recruiter%}
+                            <a href="{% url 'edit-job' job.pk %}" class="btn btn-warning">Edit</a>
+                            <a href="{% url 'delete-job' job.pk %}" class="btn btn-danger">Delete</a>
+                            {% elif user.is_jobseeker %}
+                            <a href="{% url 'apply-job' job.pk %}" class="btn btn-dark">Apply</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% if user.is_jobseeker %}
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">My Applications</h3>
+        </div>
+        <div class="card-body table-responsive p-0" style="height: 300px;">
+            <table class="table table-head-fixed text-nowrap">
+                <thead>
+                    <tr>
+                       <th scope="col">Date</th>
+                       <th scope="col">Job</th>
+                       <th scope="col">Company</th>
+                       <th scope="col">Evaluation Result</th>
+                       <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job in my_jobs %}
+                    <tr>
+                        <td>{{job.date}}</td>
+                        <td>{{job.job.name}}</td>
+                        <td>{{job.job.company}}</td>
+                        <td>{{job.evaluation_result}}</td>
+                        <td style="float: right; border-style: hidden;">
+                            <a href="{% url 'evaluation-job' job.pk %}" class="btn btn-success">Detail</a>
+                        </td>
+                    </tr>
+                     {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock %}

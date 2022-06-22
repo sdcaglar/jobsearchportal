@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 80%; padding-top: 5%; margin-right: auto; margin-left:auto;">
+    <h3>Apply Job</h3>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <p>Do you want to apply <strong>{{job}}</strong> job? </p>
+        <input class="btn btn-dark" type="submit" name="Apply">
+    </form>
+</div>
+{% endblock %}
