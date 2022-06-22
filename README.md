@@ -5,6 +5,8 @@ This project is an example project to  job search platforms for jobseekers
 and recruiters. In this Django app, recruiters can create jobs and jobseekers
 can apply related to their interests.
 
+<img src="https://github.com/sdcaglar/jobsearchportal/blob/84c5255eac38a6c65f8e0a57984a6fd41d548dbd/media/jobseeker.gif">
+
 ## Features
 
 - Registration and login
