@@ -3,7 +3,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView
@@ -11,6 +10,7 @@ from django.views.generic.edit import UpdateView, DeleteView
 from .forms import JobSeekerSignUpForm, RecruiterSignUpForm, JobForm
 from .models import Job, UserJob, User
 from .admin import UserChangeForm
+from django.contrib.auth.decorators import login_required
 
 
 class HomeView(TemplateView):
@@ -99,6 +99,7 @@ class SearchView(ListView):
         return jobs
 
 
+@login_required
 def change_password(request):
     if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)
@@ -148,6 +149,7 @@ def login_jobseeker(request):
     return render(request, "accounts/jobseeker/login.html", context)
 
 
+@login_required
 def logout_jobseeker(request):
     logout(request)
     return redirect("home")
@@ -185,11 +187,13 @@ def login_recruiter(request):
     return render(request, "accounts/recruiter/login.html", context)
 
 
+@login_required
 def logout_recruiter(request):
     logout(request)
     return redirect("home")
 
 
+@login_required
 def create_job(request):
     if request.method == "POST":
         job_form = JobForm(request.POST)
@@ -204,6 +208,7 @@ def create_job(request):
     return render(request, "create_job.html", {"job_form": job_form})
 
 
+@login_required
 def apply_job(request, pk):
     user = request.user
     job = get_object_or_404(Job, pk=pk)
@@ -221,6 +226,7 @@ def apply_job(request, pk):
         return render(request, "apply_job.html", {"job": job})
 
 
+@login_required
 def profile(request):
     user = request.user
     form = UserChangeForm(instance=user)
@@ -233,6 +239,7 @@ def profile(request):
     return render(request, "profile.html", context)
 
 
+@login_required
 def jobseeker_profile(request, pk):
     user = get_object_or_404(User, pk=pk)
 
